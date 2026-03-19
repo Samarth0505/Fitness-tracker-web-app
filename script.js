@@ -16,6 +16,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // --- Motivational Quotes ---
+    const quotes = [
+        "The only bad workout is the one that didn't happen.",
+        "Action is the foundational key to all success.",
+        "Your body can stand almost anything. It’s your mind that you have to convince.",
+        "Fitness is not about being better than someone else. It’s about being better than you were yesterday.",
+        "Motivation is what gets you started. Habit is what keeps you going."
+    ];
+
+    const quoteElement = document.getElementById('motivationalQuote');
+    if (quoteElement) {
+        quoteElement.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+    }
+
     // --- Page Specific Logic ---
 
     // Register Page
@@ -83,120 +97,145 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = 'login.html';
             });
         }
+
+        // BMI Calculator
+        const calculateBmiBtn = document.getElementById('calculateBmiBtn');
+        if (calculateBmiBtn) {
+            calculateBmiBtn.addEventListener('click', () => {
+                const weight = parseFloat(document.getElementById('bmiWeight').value);
+                const height = parseFloat(document.getElementById('bmiHeight').value) / 100;
+                if (weight > 0 && height > 0) {
+                    const bmi = (weight / (height * height)).toFixed(1);
+                    document.getElementById('bmiResult').textContent = `Your BMI: ${bmi}`;
+                }
+            });
+        }
     }
 
-    // Activity Page
-    if (page === 'activity.html') {
-        const addActivityBtn = document.getElementById('addActivityBtn');
-        const activityList = document.getElementById('activityList');
+    // Workout Page
+    if (page === 'workout.html') {
+        const addWorkoutBtn = document.getElementById('addWorkoutBtn');
+        const workoutList = document.getElementById('workoutList');
         const searchBox = document.getElementById('searchBox');
 
-        const renderActivities = (filter = '') => {
-            const activities = JSON.parse(localStorage.getItem('activities') || '[]');
-            const userActivities = activities.filter(a => a.userEmail === currentUser);
-            const filtered = userActivities.filter(a => a.type.toLowerCase().includes(filter.toLowerCase()));
+        const renderWorkouts = (filter = '') => {
+            const workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
+            const userWorkouts = workouts.filter(w => w.userEmail === currentUser);
+            const filtered = userWorkouts.filter(w => w.name.toLowerCase().includes(filter.toLowerCase()));
 
-            activityList.innerHTML = filtered.map(a => `
-                <div class="fitness-card flex justify-between items-center mb-4">
+            workoutList.innerHTML = filtered.map(w => `
+                <div class="fitness-card flex justify-between items-center mb-4 animate-fade">
                     <div>
-                        <h3 class="font-bold text-lg text-emerald-600">${a.type}</h3>
-                        <p class="text-slate-500 text-sm">${a.date}</p>
+                        <h3 class="font-bold text-lg text-neon-green">${w.name}</h3>
+                        <p class="text-slate-400 text-sm">${w.date}</p>
                     </div>
                     <div class="text-right">
-                        <p class="font-semibold">${a.duration} mins</p>
-                        <p class="text-emerald-500 font-bold">${a.calories} kcal</p>
+                        <p class="font-semibold">${w.duration} mins</p>
+                        <p class="text-neon-green font-bold">${w.calories} kcal</p>
                     </div>
                 </div>
             `).join('');
         };
 
-        if (addActivityBtn) {
-            addActivityBtn.addEventListener('click', (e) => {
+        if (addWorkoutBtn) {
+            addWorkoutBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                const type = document.getElementById('activityType').value;
+                const name = document.getElementById('workoutName').value;
                 const duration = document.getElementById('duration').value;
                 const calories = document.getElementById('calories').value;
 
-                if (!type || !duration || !calories) {
+                if (!name || !duration || !calories) {
                     alert('Please fill all fields');
                     return;
                 }
 
-                const activities = JSON.parse(localStorage.getItem('activities') || '[]');
-                activities.push({
+                const workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
+                workouts.push({
                     userEmail: currentUser,
-                    type,
+                    name,
                     duration,
                     calories,
                     date: new Date().toLocaleDateString()
                 });
-                localStorage.setItem('activities', JSON.stringify(activities));
+                localStorage.setItem('workouts', JSON.stringify(workouts));
                 
                 // Clear inputs
+                document.getElementById('workoutName').value = '';
                 document.getElementById('duration').value = '';
                 document.getElementById('calories').value = '';
                 
-                renderActivities();
+                renderWorkouts();
             });
         }
 
         if (searchBox) {
             searchBox.addEventListener('input', (e) => {
-                renderActivities(e.target.value);
+                renderWorkouts(e.target.value);
             });
         }
 
-        renderActivities();
+        renderWorkouts();
     }
 
-    // Goals Page
-    if (page === 'goals.html') {
-        const saveGoalBtn = document.getElementById('saveGoalBtn');
-        const goals = JSON.parse(localStorage.getItem('goals') || '{}');
-        const userGoals = goals[currentUser] || { steps: 10000, calories: 2000 };
-
-        document.getElementById('stepsGoal').value = userGoals.steps;
-        document.getElementById('caloriesGoal').value = userGoals.calories;
-
-        const updateProgress = () => {
-            const activities = JSON.parse(localStorage.getItem('activities') || '[]');
-            const userActivities = activities.filter(a => a.userEmail === currentUser);
-            const totalCals = userActivities.reduce((sum, a) => sum + parseInt(a.calories), 0);
+    // Progress Page
+    if (page === 'progress.html') {
+        const clearProgressBtn = document.getElementById('clearProgressBtn');
+        
+        const renderProgress = () => {
+            const workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
+            const userWorkouts = workouts.filter(w => w.userEmail === currentUser);
             
-            const calProgress = Math.min((totalCals / userGoals.calories) * 100, 100);
-            document.getElementById('calProgress').style.width = `${calProgress}%`;
-            document.getElementById('calProgressText').textContent = `${totalCals} / ${userGoals.calories} kcal`;
+            const totalCals = userWorkouts.reduce((sum, w) => sum + parseInt(w.calories), 0);
+            const totalDuration = userWorkouts.reduce((sum, w) => sum + parseInt(w.duration), 0);
+            const totalWorkouts = userWorkouts.length;
+
+            document.getElementById('totalWorkouts').textContent = totalWorkouts;
+            document.getElementById('totalCalories').textContent = totalCals;
+            document.getElementById('totalDuration').textContent = totalDuration;
+
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = userWorkouts.map(w => `
+                <div class="fitness-card flex justify-between items-center mb-4 animate-fade">
+                    <div>
+                        <h3 class="font-bold text-lg text-neon-green">${w.name}</h3>
+                        <p class="text-slate-400 text-sm">${w.date}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-semibold">${w.duration} mins</p>
+                        <p class="text-neon-green font-bold">${w.calories} kcal</p>
+                    </div>
+                </div>
+            `).join('');
         };
 
-        if (saveGoalBtn) {
-            saveGoalBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const steps = document.getElementById('stepsGoal').value;
-                const calories = document.getElementById('caloriesGoal').value;
-
-                goals[currentUser] = { steps, calories };
-                localStorage.setItem('goals', JSON.stringify(goals));
-                alert('Goals saved!');
-                updateProgress();
+        if (clearProgressBtn) {
+            clearProgressBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to clear all progress?')) {
+                    const workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
+                    const otherUsersWorkouts = workouts.filter(w => w.userEmail !== currentUser);
+                    localStorage.setItem('workouts', JSON.stringify(otherUsersWorkouts));
+                    renderProgress();
+                }
             });
         }
 
-        updateProgress();
+        renderProgress();
     }
 
     function updateDashboardStats() {
-        const activities = JSON.parse(localStorage.getItem('activities') || '[]');
-        const userActivities = activities.filter(a => a.userEmail === currentUser);
+        const workouts = JSON.parse(localStorage.getItem('workouts') || '[]');
+        const userWorkouts = workouts.filter(w => w.userEmail === currentUser);
         
-        const totalCals = userActivities.reduce((sum, a) => sum + parseInt(a.calories), 0);
-        const totalActs = userActivities.length;
+        const totalCals = userWorkouts.reduce((sum, w) => sum + parseInt(w.calories), 0);
+        const totalDuration = userWorkouts.reduce((sum, w) => sum + parseInt(w.duration), 0);
+        const totalWorkouts = userWorkouts.length;
         
-        const stepsCount = document.getElementById('stepsCount');
-        const caloriesBurned = document.getElementById('caloriesBurned');
-        const totalActivities = document.getElementById('totalActivities');
+        const caloriesBurned = document.getElementById('totalCaloriesBurned');
+        const workoutsCount = document.getElementById('totalWorkoutsCount');
+        const durationCount = document.getElementById('totalDurationCount');
 
-        if (stepsCount) stepsCount.textContent = "8,432"; // Mock steps for demo
         if (caloriesBurned) caloriesBurned.textContent = totalCals;
-        if (totalActivities) totalActivities.textContent = totalActs;
+        if (workoutsCount) workoutsCount.textContent = totalWorkouts;
+        if (durationCount) durationCount.textContent = totalDuration;
     }
 });

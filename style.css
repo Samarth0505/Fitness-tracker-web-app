@@ -5,51 +5,109 @@
 }
 
 :root {
-  --primary: #10b981;
-  --primary-dark: #059669;
-  --bg-light: #f8fafc;
-  --card-bg: #ffffff;
-  --text-main: #1e293b;
-  --text-muted: #64748b;
+  --neon-green: #ccff00;
+  --dark-bg: #0a0a0a;
+  --card-bg: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent-gradient: linear-gradient(135deg, #ccff00 0%, #99ff00 100%);
 }
 
 body {
-  background-color: var(--bg-light);
-  color: var(--text-main);
+  background-color: var(--dark-bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
   min-height: 100vh;
 }
 
 .fitness-card {
-  @apply bg-white rounded-2xl shadow-sm border border-slate-100 p-6 transition-all hover:shadow-md;
+  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
 }
 
-.btn-primary {
-  @apply bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2;
+.fitness-card:hover {
+  border-color: var(--neon-green);
+  box-shadow: 0 0 20px rgba(204, 255, 0, 0.1);
+  transform: translateY(-2px);
 }
 
-.input-field {
-  @apply w-full px-4 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all;
+.btn-neon {
+  background: var(--accent-gradient);
+  color: #000;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-neon:hover {
+  box-shadow: 0 0 15px rgba(204, 255, 0, 0.5);
+  transform: scale(1.02);
+}
+
+.input-dark {
+  background: #252525;
+  border: 1px solid #333;
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.input-dark:focus {
+  outline: none;
+  border-color: var(--neon-green);
+  box-shadow: 0 0 10px rgba(204, 255, 0, 0.2);
 }
 
 .nav-link {
-  @apply flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 transition-all;
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
 }
 
-.nav-link.active {
-  @apply bg-emerald-500 text-white hover:bg-emerald-600;
+.nav-link:hover, .nav-link.active {
+  color: var(--neon-green);
+  background: rgba(204, 255, 0, 0.05);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--neon-green);
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #0a0a0a;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
+  background: #333;
+  border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--neon-green);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade {
+  animation: fadeIn 0.5s ease forwards;
 }
