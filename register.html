@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Fitness Tracker</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="flex items-center justify-center p-4">
+    <div class="w-full max-w-md fitness-card">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 text-emerald-500 rounded-full mb-4">
+                <i class="fas fa-user-plus fa-2x"></i>
+            </div>
+            <h1 class="text-2xl font-bold">Create Account</h1>
+            <p class="text-slate-500">Start your fitness journey today</p>
+        </div>
+
+        <form class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                        <i class="fas fa-user"></i>
+                    </span>
+                    <input type="text" id="name" class="input-field pl-10" placeholder="John Doe">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Email Address</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                        <i class="fas fa-envelope"></i>
+                    </span>
+                    <input type="email" id="email" class="input-field pl-10" placeholder="name@example.com">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                        <i class="fas fa-lock"></i>
+                    </span>
+                    <input type="password" id="password" class="input-field pl-10" placeholder="••••••••">
+                </div>
+            </div>
+
+            <button type="submit" id="registerBtn" class="btn-primary w-full py-3 mt-2">
+                Register
+            </button>
+        </form>
+
+        <p class="text-center mt-6 text-slate-600">
+            Already have an account? 
+            <a href="login.html" class="text-emerald-600 font-semibold hover:underline">Login here</a>
+        </p>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>
