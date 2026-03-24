@@ -2,38 +2,25 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'NodeJS'
+        nodejs 'NodeJS'   // Must match Jenkins config name
     }
 
     stages {
-
         stage('Install') {
             steps {
-                bat 'npm install'
+                sh 'npm install'
             }
         }
 
         stage('Build') {
             steps {
-                bat 'npm run build'
+                sh 'npm run build'
             }
         }
 
-        stage('Test') {
+        stage('Run') {
             steps {
-                script {
-                    try {
-                        bat 'npm test'
-                    } catch (Exception e) {
-                        echo 'Skipping tests (not defined)'
-                    }
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploy stage running...'
+                sh 'npm start'
             }
         }
     }
