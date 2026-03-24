@@ -1,26 +1,16 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'NodeJS'   // Must match Jenkins config name
-    }
-
     stages {
-        stage('Install') {
-            steps {
-                sh 'npm install'
-            }
-        }
-
         stage('Build') {
             steps {
-                sh 'npm run build'
+                echo 'Static Web App - No Build Needed'
             }
         }
 
-        stage('Run') {
+        stage('Deploy') {
             steps {
-                sh 'npm start'
+                echo 'Ready to deploy'
             }
         }
     }
